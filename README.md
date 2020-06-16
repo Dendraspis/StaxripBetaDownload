@@ -1,6 +1,6 @@
 ## StaxripBetaDownload
 
-This small Powershell script checks and downloads the latest beta version of [StaxRip](https://github.com/staxrip/staxrip).
+This small Powershell script checks and downloads the latest beta version of [StaxRip](https://github.com/staxrip/staxrip) - at the moment only from DropBox.
 
 ------
 
@@ -25,4 +25,5 @@ StaxripBetaDownload.ps1 -DownloadDirectory A:\Apps\StaxRip
 ```Powershell
 StaxripBetaDownload.ps1 -GetDropboxUrlFromDoc
 ```
+
 
