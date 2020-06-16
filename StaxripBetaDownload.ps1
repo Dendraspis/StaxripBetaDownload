@@ -27,7 +27,7 @@ function Main{
         if( $GetDropboxUrlFromDoc )
         {
             $WR = Invoke-WebRequest -Uri $DocUrl
-            $DB = $WR.content | Select-String  "(https://www.dropbox.com[^""]*)""" -AllMatches
+            $DB = $WR.content | Select-String "(https://www.dropbox.com[^""]*)""" -AllMatches
 
             if( $DB.Matches.Count -gt 0 )
             {
