@@ -18,7 +18,7 @@ StaxripBetaDownload.ps1 -ConfirmDownload
 
 3. Check for latest version and download it to `A:\Apps\StaxRip` if it doesn't exist there yet:
 ```Powershell
-StaxripBetaDownload.ps1 -DownloadDirectory A:\Apps\StaxRip
+StaxripBetaDownload.ps1 -DownloadDirectory "A:\Apps\StaxRip"
 ```
 
 4. Check for latest version and download it to current directory if it doesn't exist there yet. Use the current DropBox link from the docs instead of the one saved in this script:
