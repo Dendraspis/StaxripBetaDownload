@@ -6,7 +6,7 @@ This small Powershell script checks and downloads the latest beta version of [St
 
 ## Usage
 
-1. Check for latest beta version and download it to current directory if it doesn't exist yet:
+1. Check for latest beta version and download it to current directory if it doesn't exist there yet:
 ```Powershell
 StaxripBetaDownload.ps1
 ```
