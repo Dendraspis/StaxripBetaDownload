@@ -6,7 +6,6 @@ param(
     ,[string]$DownloadDirectory = (Get-Location | select -exp Path)
 )
 
-
 # Constants
 $ScriptVersion    = "v1.0"
 
@@ -18,11 +17,8 @@ $COLORQUESTION    = [ConsoleColor]::Gray
 $COLORSKIP        = [ConsoleColor]::DarkCyan
 
 
-
 # Variables, ..
 $CurrentDir       = (Get-Location | select -exp Path)
-
-
 
 
 function Main{
@@ -38,11 +34,9 @@ function Main{
                 $DropboxUrl = $DB.Matches[0].Groups[1].Value
             }
         }
-        
 
         $out = "Using Dropbox URL: {0}" -f $DropboxUrl
         Write-Host -ForegroundColor $COLORDROPBOX $out
-
 
         $WR = Invoke-WebRequest -Uri $DropboxUrl
         $SR = $WR.content | Select-String  "(https://[^""]*/([^""/]*StaxRip[^""?]*)[^""]*)\\""" -AllMatches
@@ -85,9 +79,7 @@ function Main{
                     {
                         $proceedDownload = $false
                     }
-
                 }
-
 
                 if( $proceedDownload )
                 {
@@ -115,7 +107,6 @@ function Main{
             $out = "Done."
             Write-Host -ForegroundColor $COLORFOOTER $out
         }
-
     }
     catch 
     {
@@ -125,20 +116,6 @@ function Main{
     {
 
     }
-
-
-
-    Write-Host
-    $out = "-----"
-    #Write-Host -ForegroundColor $COLORFOOTER ("  " + $out)
-    $out = "¯" * $out.Length
-    #Write-Host -ForegroundColor $COLORFOOTER ("  " + $out)
 }
 
-
-
-Write-Host -ForegroundColor $COLORLINE ("·" * 80)
-Write-Host -ForegroundColor $COLORHEADER ("  " + "StaxripBetaDownload " + $ScriptVersion)
-Write-Host -ForegroundColor $COLORLINE ("·" * 80)
 Main
-
