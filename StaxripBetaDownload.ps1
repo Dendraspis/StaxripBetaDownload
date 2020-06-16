@@ -118,4 +118,7 @@ function Main{
     }
 }
 
+Write-Host -ForegroundColor $COLORLINE ("·" * 80)
+Write-Host -ForegroundColor $COLORHEADER ("  " + "StaxripBetaDownload " + $ScriptVersion)
+Write-Host -ForegroundColor $COLORLINE ("·" * 80)
 Main
