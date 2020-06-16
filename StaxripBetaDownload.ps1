@@ -1,6 +1,6 @@
 param(
      [switch]$GetDropboxUrlFromDoc = $false
-    ,[switch]$Confirm = $false
+    ,[switch]$ConfirmDownload = $false
     ,[string]$DropboxUrl = "https://www.dropbox.com/sh/4ctl2y928xkak4f/AAADEZj_hFpGQaNOdd3yqcAHa?dl=0&lst="
     ,[string]$DocUrl = "https://staxrip.readthedocs.io/introduction.html"
     ,[string]$DownloadDirectory = (Get-Location | select -exp Path)
