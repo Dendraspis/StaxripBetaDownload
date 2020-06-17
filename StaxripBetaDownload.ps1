@@ -17,10 +17,6 @@ $COLORQUESTION    = [ConsoleColor]::Gray
 $COLORSKIP        = [ConsoleColor]::DarkCyan
 
 
-# Variables, ..
-$CurrentDir       = (Get-Location | select -exp Path)
-
-
 function Main{
     try
     {
