@@ -58,7 +58,7 @@ function Main{
             
             if( [System.IO.File]::Exists($downloadPath) )
             {
-                $out = "The lastest version already exists. Skipping download!"
+                $out = "The lastest version already exists. Skipping download..."
                 Write-Host -ForegroundColor $COLORSKIP $out
             }
             else
