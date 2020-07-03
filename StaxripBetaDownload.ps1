@@ -1,25 +1,31 @@
 param(
      [switch]$GetDropboxUrlFromDoc = $false
     ,[switch]$ConfirmDownload = $false
-    ,[string]$DropboxUrl = "https://www.dropbox.com/sh/4ctl2y928xkak4f/AAADEZj_hFpGQaNOdd3yqcAHa?dl=0&lst="
+    ,[switch]$NoChangelog = $false
     ,[string]$DocUrl = "https://staxrip.readthedocs.io/introduction.html"
-    ,[string]$DownloadDirectory = (Get-Location | select -exp Path)
+    ,[string]$DropboxUrl = "https://www.dropbox.com/sh/4ctl2y928xkak4f/AAADEZj_hFpGQaNOdd3yqcAHa?dl=0&lst="
+    ,[string]$ChangelogUrl = "https://github.com/staxrip/staxrip/blob/master/Changelog.md"
+    ,[string]$DownloadDirectory = (Get-Location | Select -exp Path)
 )
 
 # Constants
-$ScriptVersion    = "v1.0"
+$ScriptVersion    = "v1.1"
 
-$COLORLINE        = [ConsoleColor]::Green
-$COLORHEADER      = [ConsoleColor]::Green
-$COLORFOOTER      = [ConsoleColor]::Green
-$COLORDROPBOX     = [ConsoleColor]::Yellow
-$COLORQUESTION    = [ConsoleColor]::Gray
-$COLORSKIP        = [ConsoleColor]::DarkCyan
+$COLORLINE             = [ConsoleColor]::Green
+$COLORHEADER           = [ConsoleColor]::Green
+$COLORFOOTER           = [ConsoleColor]::Green
+$COLORDROPBOX          = [ConsoleColor]::Yellow
+$COLORQUESTION         = [ConsoleColor]::Gray
+$COLORCHANGELOG        = [ConsoleColor]::White
+$COLORCHANGELOGENTRY   = [ConsoleColor]::Cyan
+$COLORSKIP             = [ConsoleColor]::DarkCyan
 
 
 function Main{
     try
     {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
         if( $GetDropboxUrlFromDoc )
         {
             $WR = Invoke-WebRequest -Uri $DocUrl
@@ -46,11 +52,14 @@ function Main{
             $url = $lastMatch.Groups[1].Value -replace "\?dl=0","\?dl=1"
             $filename = $lastMatch.Groups[2].Value
             $downloadPath = [System.IO.Path]::Combine($DownloadDirectory, $filename)
+            $version = ($filename | Select-String ".*(\d+\.\d+\.\d+\.\d+).*" -AllMatches).Matches.Groups[1]
 
             Write-Host
-            $out = "Latest version: {0}" -f $filename
+            $out = "Latest version: {0}" -f $version
             Write-Host -ForegroundColor $COLORDROPBOX $out
             $out = "           URL: {0}" -f $url
+            Write-Host -ForegroundColor $COLORDROPBOX $out
+            $out = "      Filename: {0}" -f $filename
             Write-Host -ForegroundColor $COLORDROPBOX $out
             $out = "       Save as: {0}" -f $downloadPath
             Write-Host -ForegroundColor $COLORDROPBOX $out
@@ -86,6 +95,26 @@ function Main{
 
                         New-Item -ItemType Directory -Path $DownloadDirectory | Out-Null
                     }
+
+                    if( -not ($NoChangelog) )
+                    {
+                        $out = "Changes in this version:"
+                        Write-Host -ForegroundColor $COLORCHANGELOG $out
+
+                        $WR = Invoke-WebRequest -Uri $ChangelogUrl
+
+                        $split = $WR.content -split "<h1>" | Where{ $_ -match $version }
+                        $matches = $split | Select-String "<li>(.*)</li>" -AllMatches
+
+                        foreach( $match in $matches.Matches )
+                        {
+                            $out = "· " + $match.Groups[1].Value
+                            Write-Host -ForegroundColor $COLORCHANGELOGENTRY $out
+                        }
+
+                        Write-Host
+                    }
+
 
                     $out = "Downloading, please be patient..."
                     Write-Host -ForegroundColor $COLORDROPBOX $out
