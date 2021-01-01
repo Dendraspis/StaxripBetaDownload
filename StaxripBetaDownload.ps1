@@ -9,7 +9,7 @@ param(
 )
 
 # Constants
-$ScriptVersion    = "v1.1"
+$ScriptVersion    = "v1.3"
 
 $COLORLINE             = [ConsoleColor]::Green
 $COLORHEADER           = [ConsoleColor]::Green
@@ -41,7 +41,7 @@ function Main{
         Write-Host -ForegroundColor $COLORDROPBOX $out
 
         $WR = Invoke-WebRequest -Uri $DropboxUrl
-        $SR = $WR.content | Select-String  "(https://[^""]*/([^""/]*StaxRip[^""?]*)[^""]*)\\""" -AllMatches
+        $SR = $WR.content | Select-String  "(https://[^""]*/([^""/]*StaxRip[^""/?]*x64[^""?]*)[^""]*)\\""" -AllMatches
 
         if( $SR.Matches.Count -gt 0 )
         {
@@ -104,12 +104,24 @@ function Main{
                         $WR = Invoke-WebRequest -Uri $ChangelogUrl
 
                         $split = $WR.content -split "<h1>" | Where{ $_ -match $version }
-                        $matches = $split | Select-String "<li>(.*)</li>" -AllMatches
+                        $split = $split -replace "<a[^>]*>",""
+                        $split = $split -replace "</a>",""
+                        $split = $split -replace "`r",""
+                        $split = $split -replace "`n"," "
+
+                        $matches = $split | Select-String '<li>((?!</li>).)*</li>' -AllMatches
 
                         foreach( $match in $matches.Matches )
                         {
-                            $out = "· " + $match.Groups[1].Value
-                            Write-Host -ForegroundColor $COLORCHANGELOGENTRY $out
+                            $value = $match.Groups[0].Value
+                            $m = $value | Select-String '<li>(.*)</li>' -AllMatches
+                            $content = $m.Matches.Groups[1].Value
+
+                            if( -not ($content.StartsWith("     ") ) )
+                            {
+                                $out = "· " + $content
+                                Write-Host -ForegroundColor $COLORCHANGELOGENTRY $out
+                            }
                         }
 
                         Write-Host
@@ -141,7 +153,15 @@ function Main{
     {
 
     }
+
+    Write-Host
+    $out = "-----"
+    #Write-Host -ForegroundColor $COLORFOOTER ("  " + $out)
+    $out = "¯" * $out.Length
+    #Write-Host -ForegroundColor $COLORFOOTER ("  " + $out)
 }
+
+
 
 Write-Host -ForegroundColor $COLORLINE ("·" * 80)
 Write-Host -ForegroundColor $COLORHEADER ("  " + "StaxripBetaDownload " + $ScriptVersion)
