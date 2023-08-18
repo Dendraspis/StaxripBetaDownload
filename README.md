@@ -1,10 +1,14 @@
-## StaxripBetaDownload
+## Deprecated because of changed ownership, versioning and changed publication of StaxRip.
+
+-------
+
+### StaxripBetaDownload
 
 This small Powershell script checks and downloads the latest beta version of [StaxRip](https://github.com/staxrip/staxrip) - at the moment only from DropBox.
 
 ------
 
-## Usage
+### Usage
 
 1. Check for latest beta version and download it to current directory if it doesn't exist there yet:
 ```Powershell
